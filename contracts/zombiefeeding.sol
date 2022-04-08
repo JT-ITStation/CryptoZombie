@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.4;
 import "./zombiefactory.sol";
 
 abstract contract  KittyInterface  {
@@ -22,7 +22,7 @@ contract ZombieFeeding is ZombieFactory{
     //address ckAddress = 0x06012c8cf97BEaD5deAe237070F9587f8E7A266d;
     KittyInterface kittyContract;
 
-    modifier ownerOf (uint _zombieId) {
+    modifier onlyOwnerOf (uint _zombieId) {
         require(msg.sender == zombieToOwner[_zombieId]);
         _;
     }
@@ -40,7 +40,7 @@ contract ZombieFeeding is ZombieFactory{
     }
 
 
-    function feedAndMultiply(uint _zombieId, uint _targetDna, string memory _species) internal ownerOf(_zombieId) {
+    function feedAndMultiply(uint _zombieId, uint _targetDna, string memory _species) internal onlyOwnerOf(_zombieId) {
         //require(msg.sender == zombieToOwner[_zombieId]);
         Zombie storage myZombie = zombies[_zombieId] ;
         require(_isReady(myZombie));

@@ -1,10 +1,9 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.4;
 import "./zombiefeeding.sol";
 
 contract ZombieHelper is ZombieFeeding {
-    
-    uint levelUpFee = 0.001 ether;
+    uint256 levelUpFee = 0.001 ether;
 
     modifier aboveLevel(uint256 _level, uint256 _zombieId) {
         require(zombies[_zombieId].level >= _level);
@@ -14,26 +13,29 @@ contract ZombieHelper is ZombieFeeding {
     function withdraw() external onlyOwner {
         payable(msg.sender).transfer(address(this).balance);
     }
-    function setLevelUpFee(uint _fee) external onlyOwner {
+
+    function setLevelUpFee(uint256 _fee) external onlyOwner {
         levelUpFee = _fee;
     }
 
-function levelUp(uint _zombieId) external payable{
-    require(msg.value == levelUpFee);
-    zombies[_zombieId].level++;
-}
+    function levelUp(uint256 _zombieId) external payable {
+        require(msg.value == levelUpFee);
+        zombies[_zombieId].level++;
+    }
 
     function changeName(uint256 _zombieId, string memory _newName)
         external
-        aboveLevel(2, _zombieId) ownerOf(_zombieId)
+        aboveLevel(2, _zombieId)
+        onlyOwnerOf(_zombieId)
     {
         zombies[_zombieId].name = _newName;
     }
 
     function changeDna(uint256 _zombieId, uint256 _newDna)
-        external 
-        aboveLevel(20, _zombieId) ownerOf(_zombieId)
-    {        
+        external
+        aboveLevel(20, _zombieId)
+        onlyOwnerOf(_zombieId)
+    {
         zombies[_zombieId].dna = _newDna;
     }
 
